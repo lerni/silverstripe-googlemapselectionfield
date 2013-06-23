@@ -1,8 +1,8 @@
 <?php
 
 /**
- * A form field which outputs a google map, input field for an address which moves
- * the map.
+ * A form field which outputs a google map, input field for an address which 
+ * moves the map.
  *
  * Currently saves the address of a given point. 
  *
@@ -32,7 +32,9 @@ class GoogleMapSelectableField extends FormField {
 			$mapHeight = str_replace("%","",$mapHeight);
 			$mapHeight .= "px";
 		}
+
 		parent::__construct($name, $title);
+
 		$this->startLat = $startLat;
 		$this->startLong = $startLong;
 		$this->mapWidth = $mapWidth;
@@ -41,9 +43,8 @@ class GoogleMapSelectableField extends FormField {
 		
 	}
 	
-	
-	function Field() {
-		Requirements::javascript("http://maps.google.com/maps/api/js?sensor=true");
+	public function Field($properties = array()) {
+		Requirements::javascript("http://maps.google.com/maps/api/js?sensor=true&language=de");
 		Requirements::javascriptTemplate("googlemapselectionfield/javascript/GoogleMapSelectionField.js", array(
 			'Name' => $this->name,
 			'DefaultLat' => $this->startLat,
@@ -52,13 +53,15 @@ class GoogleMapSelectableField extends FormField {
 			'MapHeight' => $this->mapHeight,
 			'Zoom' => $this->zoom
 		));
-		return "
+
+		$field = "
 			<div class=\"field text googleMapField\">
 				<label class=\"left\">$this->Title</label>
-				<input type=\"text\" id=\"{$this->id()}\" name=\"{$this->name}\" value=\"". _t('GoogleMapSelectableField.ENTERADDRESS', 'Enter Address') ."\" class=\"text googleMapAddressField\"/>
-				<input type=\"submit\" value=\"". _t('EditableFormField.GO', 'Go') ."\" class=\"submit googleMapAddressSubmit\" />
+				<input type=\"text\" id=\"{$this->id()}\" name=\"{$this->name}\" value=\"". _t('GoogleMapSelectableField.ENTERADDRESS', 'Ort eingeben...') ."\" class=\"text googleMapAddressField\"/>
+				<input type=\"submit\" value=\"". _t('EditableFormField.GO', 'Auf Karte suchen...') ."\" class=\"submit googleMapAddressSubmit\" />
 				<input type=\"hidden\" id=\"{$this->id()}_MapURL\" name=\"{$this->name}_MapURL\" />
-				<div id=\"map_{$this->name}\" style=\"width: $this->mapWidth; height: $this->mapHeight;\"></div>
+				<div id=\"map_{$this->name}\" class=\"container\" style=\"width: $this->mapWidth; height: $this->mapHeight;\"></div>
 			</div>";
+			return $field;
 	}
 }

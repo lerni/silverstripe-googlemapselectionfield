@@ -1,32 +1,34 @@
 <?php
+
 /**
- * Shows a google map on the front end, allowing the user to move
- * and drag the marker round to select a point then saves this point
- * in a hidden field for the form submission
+ * Shows a google map on the front end, allowing the user to move and drag the 
+ * marker round to select a point then saves this point in a hidden field for 
+ * the form submission.
  *
+ * @package googlemapselectionfield
  */
 
 class EditableGoogleMapSelectableField extends EditableFormField {
 	
-	static $singular_name = 'Google Map';
+	private static $singular_name = 'Google Map';
 	
-	static $plural_name = 'Google Maps';
-	
-	static $api_key = "";
-	
+	private static $plural_name = 'Google Maps';
+		
 	public function Icon()  {
 		return 'googlemapselectionfield/images/' . strtolower($this->class) . '.png';	
 	}
 	
 	public function getFieldConfiguration() {
 		$zoomLevels = array();
+
 		for($i = 1; $i < 20; $i++) {
 			$message = ($i == 1) ? _t('EditableFormField.LOWEST', 'Lowest') : "";
 			$message = ($i == 19) ? _t('EditableFormField.HIGHEST', 'Highest') : $message;
 			$zoomLevels[$i] = ($message) ? $i .' - '. $message : $i;
 		}
+
 		$fields = parent::getFieldConfiguration();
-		$fields->merge(new FieldSet(
+		$fields->merge(new FieldList(
 			new TextField(
 				"Fields[$this->ID][CustomSettings][StartLant]", _t('EditableFormField.STARTLATITUDE', 'Starting Point Latitude'), 
 				($this->getSetting('StartLant')) ? $this->getSetting('StartLant') : '10'
@@ -49,8 +51,13 @@ class EditableGoogleMapSelectableField extends EditableFormField {
 				($this->getSetting('MapHeight')) ? $this->getSetting('MapHeight') : '300px'
 			)
 		));
+
 		return $fields;
 	}
+
+	/**
+	 * @package GoogleMapSelectableField
+	 */
 	public function getFormField() {
 		return new GoogleMapSelectableField($this->Name, $this->Title, 
 			$this->getSetting('StartLant'),
@@ -61,12 +68,17 @@ class EditableGoogleMapSelectableField extends EditableFormField {
 	}
 	
 	/**
-	 * Return a formated output
+	 * Return a formated output.
+	 *
+	 * @param array $data
+	 *
+	 * @return string
 	 */
 	public function getValueFromData($data) {
 		$address = (isset($data[$this->Name])) ? $data[$this->Name] : _t('EditableFormField.UNKNOWN', 'Unknown');
 		$url = (isset($data[$this->Name.'_MapURL'])) ? ' ('. $data[$this->Name.'_MapURL'] .')': "";
+
 		return $address . $url; 
 	}
 }
-?>
+

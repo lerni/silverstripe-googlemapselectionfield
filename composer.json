@@ -1,0 +1,14 @@
+{
+	"name": "wilr/silverstripe-googlemapselectionfield",
+	"description": "Select a point on a map form field",
+	"type": "silverstripe-module",
+	"keywords": ["silverstripe", "google maps", "formfield"],
+	"license": "BSD-3-Clause",
+	"authors": [{
+		"name": "Will Rossiter",
+		"email": "will@fullscreen.io"
+	}],
+	"require": {
+		"silverstripe/framework": "3.0"
+	}
+}

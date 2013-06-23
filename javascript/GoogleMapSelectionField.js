@@ -37,12 +37,19 @@
 		google.maps.event.addListener(marker, 'dragend', function(overlay, point) {
 			var point = marker.getPosition();
 			map.setCenter(point);
+			$("input[name=Lat]").val(marker.position.lat());
+			$("input[name=Lng]").val(marker.position.lng());
 			geocoder.geocode( {'latLng': point } , function(results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					map.setCenter(results[0].geometry.location);
 					$("input[name=$Name]").val(results[0].formatted_address);
 					var loca = (results[0].geometry.location);
+					// $("#Form_NachrichtForm_Lat").val(loca.lat());
+					// $("#Form_NachrichtForm_Lng").val(loca.lng());
 					$("input[name=$Name_MapURL]").val("http://maps.google.com/?ll=" + point.toUrlValue() +"&q="+ point.toUrlValue() +"&z="+ map.getZoom());
+					map.setCenter(point);
+					$("input[name=Lat]").val(marker.position.lat());
+					$("input[name=Lng]").val(marker.position.lng());
 				}
 			});
 		});
@@ -52,6 +59,7 @@
 				$(this).val("");	
 			}
 		});
+
 		$("input.googleMapAddressSubmit").click(function() {
 			var address = $("input.googleMapAddressField").val();
 			geocoder.geocode( { 'address': address }, function(results, status) {
